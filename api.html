@@ -1,11 +1,12 @@
+<!--git-commits-axios-vue3-sans-token.html-->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>cocktail-api</title>
+    <title>commits-example</title>
     <style>
-        #apiCocktail {
+        #demo {
             font-family: "Helvetica", Arial, sans-serif;
         }
         a {
@@ -16,32 +17,20 @@
             line-height: 1.5em;
             margin-bottom: 20px;
         }
-        .strDrink,
-        .strCategory {
+        .value {
             font-weight: bold;
         }
     </style>
 </head>
 <body>
-<div id="apiCocktail">
+<div id="demo">
     <!-- <pre>{{commits}}</pre> -->
-    <h1>Cocktails {{strDrink}}</h1>
-    <template v-for="cocktail in cocktails">
-
-        <label :for="cocktail">{{ cocktail }}</label>
-    </template>
+    <h1>Cocktails</h1>
+    <p>vuejs/vue</p>
     <ul>
-        <li v-for="drink in drinks">
-            <a :href="record.html_url" target="_blank" class="margarita"
-            >{{ record.sha.slice(0, 7) }}</a
-            >
-            -
-            <span class="strDrink"
-            >{{ formattedCocktail(drink.commit.strDrink) }}</span
-            ><br />
-            category :
-            <span class="strCategory"
-            >{{ formattedCategory(drink.commit.strCategory) }}</span
+        <li v-for="drinks in cocktails">
+            <span class="value"
+            >{{ drinks.strDrinks}}</span
             >
         </li>
     </ul>
@@ -50,59 +39,30 @@
 <script src="https://unpkg.com/vue@3"></script>
 <script>
     const apiURL =
-        "www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita";
-    const config = {
-    };
+        "https://www.thecocktaildb.com/api/json/v1/1/random.php";
 
     Vue.createApp({
         data() {
             return {
-                currentCocktail: "margarita",
-                commits: null,
+                cocktails: null,
             };
         },
 
         created: function () {
-            this.fetchDataPromise();
-            // this.fetchDataAsync()
-        },
-// Si la valeur change, permet de lancer une action associée
-        watch: {
-            currentCocktail: "fetchDataPromise", //fetchDataAsync
+            this.fetchDataAsync()
         },
         methods: {
-            fetchDataPromise: function () {
-                const self = this;
-                axios
-                    .get(apiURL + self.currentCocktail, config)
-                    .then(function (response) {
-                        console.log(response.data);
-                        self.drinks = response.data;
-                        // console.log(self.commits[0].html_url);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            // fetchDataAsync: async function () {
-            // 	try {
-            //   	const response = await axios.get(apiURL + this.currentBranch, config)
-            // 	  console.log(response.data)
-            // 	  this.commits = response.data
-            //         // console.log(self.commits[0].html_url);
-            //   } catch(error) {
-            //     console.log(error);
-            //   }
-            // },
-            formattedCocktail: function (strDrink) {
-                const newline = strDrink.indexOf("\n");
-                return newline > 0 ? strDrink.slice(0, newline) : strDrink;
-            },
-            formattedCategory: function (strCategory) {
-                return strCategory.replace(/T|Z/g, " ");
+            fetchDataAsync: async function () {
+            	try {
+              	const response = await axios.get(apiURL)
+            	  console.log(response.data)
+            	  this.cocktails = response.data
+              } catch(error) {
+                console.log(error);
+              }
             },
         },
-    }).mount("#apiCocktail");
+    }).mount("#demo");
 </script>
 </body>
 </html>
