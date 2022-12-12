@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>cocktail-api</title>
     <style>
         #apiCocktail {
             font-family: "Helvetica", Arial, sans-serif;
         }
-
         a {
             text-decoration: none;
             color: #f66;
         }
-
         li {
             line-height: 1.5em;
             margin-bottom: 20px;
         }
-
-        .author,
-        .date {
+        .strDrink,
+        .strCategory {
             font-weight: bold;
         }
     </style>
@@ -28,36 +25,23 @@
 <body>
 <div id="apiCocktail">
     <!-- <pre>{{commits}}</pre> -->
-    <h1>Latest Vue.js Commits</h1>
+    <h1>Cocktails {{strDrink}}</h1>
     <template v-for="cocktail in cocktails">
-        <input
-                type="radio"
-                :id="cocktail"
-                :value="cocktail"
-                name="cocktail"
-                v-model="currentCocktail"
-        />
+
         <label :for="cocktail">{{ cocktail }}</label>
     </template>
-    <p>vuejs/vue@{{ currentCocktail }}</p>
     <ul>
-        <li v-for="record in commits">
-            <a :href="record.html_url" target="_blank" class="commit"
+        <li v-for="drink in drinks">
+            <a :href="record.html_url" target="_blank" class="margarita"
             >{{ record.sha.slice(0, 7) }}</a
             >
             -
-            <span class="message"
-            >{{ formattedMessage(record.commit.message) }}</span
-            ><br/>
-            by
-            <span class="author"
-            ><a :href="record.author.html_url" target="_blank"
-            >{{ record.commit.author.name }}</a
-            ></span
-            >
-            at
-            <span class="date"
-            >{{ formattedDate(record.commit.author.date) }}</span
+            <span class="strDrink"
+            >{{ formattedCocktail(drink.commit.strDrink) }}</span
+            ><br />
+            category :
+            <span class="strCategory"
+            >{{ formattedCategory(drink.commit.strCategory) }}</span
             >
         </li>
     </ul>
@@ -66,14 +50,14 @@
 <script src="https://unpkg.com/vue@3"></script>
 <script>
     const apiURL =
-        "https://api.github.com/repos/vuejs/vue/commits?per_page=3&sha=";
-    const config = {};
+        "www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita";
+    const config = {
+    };
 
     Vue.createApp({
         data() {
             return {
-                branches: ["main", "dev"],
-                currentBranch: "main",
+                currentCocktail: "margarita",
                 commits: null,
             };
         },
@@ -84,30 +68,40 @@
         },
 // Si la valeur change, permet de lancer une action associée
         watch: {
-            currentBranch: "fetchDataPromise", //fetchDataAsync
+            currentCocktail: "fetchDataPromise", //fetchDataAsync
         },
         methods: {
             fetchDataPromise: function () {
-                const axios = require("axios");
-
-                const options = {
-                    method: 'GET',
-                    url: 'https://the-cocktail-db.p.rapidapi.com/search.php',
-                    params: {s: 'vodka'},
-                    headers: {
-                        'X-RapidAPI-Key': 'SIGN-UP-FOR-KEY',
-                        'X-RapidAPI-Host': 'the-cocktail-db.p.rapidapi.com'
-                    }
-                };
-
-                axios.request(options).then(function (response) {
-                    console.log(response.data);
-                }).catch(function (error) {
-                    console.error(error);
-                })
-
+                const self = this;
+                axios
+                    .get(apiURL + self.currentCocktail, config)
+                    .then(function (response) {
+                        console.log(response.data);
+                        self.drinks = response.data;
+                        // console.log(self.commits[0].html_url);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            // fetchDataAsync: async function () {
+            // 	try {
+            //   	const response = await axios.get(apiURL + this.currentBranch, config)
+            // 	  console.log(response.data)
+            // 	  this.commits = response.data
+            //         // console.log(self.commits[0].html_url);
+            //   } catch(error) {
+            //     console.log(error);
+            //   }
+            // },
+            formattedCocktail: function (strDrink) {
+                const newline = strDrink.indexOf("\n");
+                return newline > 0 ? strDrink.slice(0, newline) : strDrink;
+            },
+            formattedCategory: function (strCategory) {
+                return strCategory.replace(/T|Z/g, " ");
+            },
         },
-    },
     }).mount("#apiCocktail");
 </script>
 </body>
