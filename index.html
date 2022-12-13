@@ -3,18 +3,45 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <title>Cocktails</title>
+    <title>EMI-Cocktail</title>
     <style>
+        .logo {
+            font-size: 32px;
+        }
+
+        #menu {
+            display: flex;
+            gap: 1em;
+            font-size: 18px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.2em;
+            background-color: dimgrey;
+            color: #fff;
+        }
+
         body {
             width: 100%;
             background-color: lightgray;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            overflow-x: hidden;
         }
 
         img {
             display: block;
-            width: 10%;
-            margin: auto;
+            margin-right: auto;
+            margin-left: auto;
+            width: 20%;
+            height: 20%;
             filter: drop-shadow(16px 16px 10px grey);
+            background-size: cover;
+            border-radius: 50%;
         }
 
         #apiCocktail {
@@ -44,16 +71,26 @@
             padding-left: 5%;
             position: absolute;
             top: 130%;
+            font-size: 16px;
         }
 
         #instructions {
             padding-left: 5%;
             position: absolute;
-            top: 250%;
+            top: 180%;
         }
     </style>
 </head>
 <body>
+<nav class="navbar">
+    <div class="logo">EMI-Cocktail</div>
+    <div id="menu">
+        <ul>
+            <li><a href="randomCocktail.html">ACCUEIL</a></li>
+            <li><a href="liste-cocktail.html">RECETTES</a></li>
+        </ul>
+    </div>
+</nav>
 <div id="apiCocktail">
     <div v-if="cocktail.strDrink">
         <h1 class="title">Cocktails {{ cocktail.strDrink.toUpperCase() }}</h1>
