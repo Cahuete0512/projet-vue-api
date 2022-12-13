@@ -17,7 +17,7 @@
             filter: drop-shadow(16px 16px 10px grey);
         }
 
-        #demo {
+        #apiCocktail {
             font-family: Jamrul;
             position: relative;
         }
@@ -50,7 +50,7 @@
     </style>
 </head>
 <body>
-<div id="demo">
+<div id="apiCocktail">
     <div v-if="cocktail.strDrink">
         <h1 class="title">Cocktails {{ cocktail.strDrink.toUpperCase() }}</h1>
     </div>&nbsp;
@@ -97,12 +97,13 @@
         "https://www.thecocktaildb.com/api/json/v1/1/random.php";
 
     Vue.createApp({
+        //Déclaration des données que l'on envoie au template
         data() {
             return {
                 cocktail: {},
             };
         },
-
+        // permet de lancer des traitements au chargement de l’application (ou à la création du composant)
         created: function () {
             this.fetchDataAsync()
         },
@@ -117,7 +118,7 @@
                 }
             },
         },
-    }).mount("#demo");
+    }).mount("#apiCocktail");
 </script>
 </body>
 </html>
