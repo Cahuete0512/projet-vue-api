@@ -1,40 +1,93 @@
-<!--git-commits-axios-vue3-sans-token.html-->
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>commits-example</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Cocktails</title>
     <style>
+        body {
+            width: 100%;
+            background-color: lightgray;
+        }
+
+        img {
+            display: block;
+            width: 10%;
+            margin: auto;
+            filter: drop-shadow(16px 16px 10px grey);
+        }
+
         #demo {
-            font-family: "Helvetica", Arial, sans-serif;
+            font-family: Jamrul;
+            position: relative;
         }
-        a {
-            text-decoration: none;
-            color: #f66;
-        }
+
         li {
             line-height: 1.5em;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
-        .value {
+
+        ul {
+            list-style-type: circle;
+        }
+
+        .title {
             font-weight: bold;
+            text-align: center;
+        }
+
+        #mesure {
+            padding-left: 5%;
+            position: absolute;
+            top: 130%;
+        }
+
+        #instructions {
+            padding-left: 5%;
+            position: absolute;
+            top: 200%;
         }
     </style>
 </head>
 <body>
 <div id="demo">
-    <!-- <pre>{{commits}}</pre> -->
-    <h1>Cocktails</h1>
-    <p>vuejs/vue</p>
-    <div v-if="cocktail.strDrink">{{cocktail.strDrink}}</div>
-    <ul>
-<!--&lt;!&ndash;        <li v-for="drinks in cocktails">&ndash;&gt;-->
-<!--            <span class="value"-->
-<!--            >{{ drinks.strDrinks}}</span-->
-<!--            >-->
-<!--        </li>-->
-    </ul>
+    <div v-if="cocktail.strDrink">
+        <h1 class="title">Cocktails {{ cocktail.strDrink.toUpperCase() }}</h1>
+    </div>&nbsp;
+    <div id="mesure">
+        <ul>
+            <li v-if="cocktail.strMeasure1 || cocktail.strIngredient1">
+                {{ `${cocktail.strMeasure1} ${cocktail.strIngredient1}` }}
+            </li>
+            <li v-if="cocktail.strMeasure2 || cocktail.strIngredient2">
+                {{ `${cocktail.strMeasure2} ${cocktail.strIngredient2}` }}
+            </li>
+            <li v-if="cocktail.strMeasure3 || cocktail.strIngredient3">
+                {{ `${cocktail.strMeasure3} ${cocktail.strIngredient3}` }}
+            </li>
+            <li v-if="cocktail.strMeasure4 || cocktail.strIngredient4">
+                {{ `${cocktail.strMeasure4} ${cocktail.strIngredient4}` }}
+            </li>
+        </ul>
+    </div>
+    <div v-if="cocktail.strDrinkThumb" class="cocktailPicture">
+        <img src="https://www.thecocktaildb.com/images/media/drink/qzs5d11504365962.jpg">
+    </div>
+    <div id="instructions">
+        <ol>
+            <li v-if="cocktail.strInstructions">
+                {{ cocktail.strInstructions }}
+            </li>
+
+            <li v-if="cocktail.strInstructionsDE">
+                {{ cocktail.strInstructionsDE }}
+            </li>
+
+            <li v-if="cocktail.strInstructionsIT">
+                {{ cocktail.strInstructionsIT }}
+            </li>
+        </ol>
+    </div>
 </div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue@3"></script>
@@ -54,13 +107,13 @@
         },
         methods: {
             fetchDataAsync: async function () {
-            	try {
-              	const response = await axios.get(apiURL)
-            	  console.log(response.data)
-            	  this.cocktail = response.data.drinks[0]
-              } catch(error) {
-                console.log(error);
-              }
+                try {
+                    const response = await axios.get(apiURL)
+                    console.log(response.data)
+                    this.cocktail = response.data.drinks[0]
+                } catch (error) {
+                    console.log(error);
+                }
             },
         },
     }).mount("#demo");
