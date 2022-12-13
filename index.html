@@ -71,8 +71,9 @@
         </ul>
     </div>
     <div v-if="cocktail.strDrinkThumb" class="cocktailPicture">
-        <img src="https://www.thecocktaildb.com/images/media/drink/qzs5d11504365962.jpg">
+        <img v-bind:src="cocktail.strDrinkThumb">
     </div>
+
     <div id="instructions">
         <ol>
             <li v-if="cocktail.strInstructions">
